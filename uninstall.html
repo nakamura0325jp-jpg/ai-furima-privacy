@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>アンケート｜AIフリマ出品アシスタント</title>
+<style>
+  :root { --accent:#2563eb; --accent-dark:#1d4ed8; --line:#e5e7eb; --text:#111827; --muted:#6b7280; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Hiragino Sans','Noto Sans JP',Meiryo,sans-serif; background:#f5f7fb; color:var(--text); line-height:1.7; }
+  main { max-width:560px; margin:0 auto; padding:40px 16px 80px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:12px; padding:28px 26px; }
+  h1 { font-size:18px; letter-spacing:-.01em; }
+  .desc { font-size:13px; color:var(--muted); margin:6px 0 22px; }
+  label.q { display:block; font-size:13px; font-weight:700; margin:18px 0 8px; }
+  .opt { display:flex; align-items:center; gap:8px; font-size:13.5px; padding:9px 12px; border:1px solid var(--line); border-radius:8px; margin-bottom:7px; cursor:pointer; transition:border-color .15s, background .15s; }
+  .opt:hover { background:#f9fafb; border-color:#d1d5db; }
+  .opt input { accent-color:var(--accent); }
+  textarea, input[type="email"] { width:100%; padding:9px 12px; font-size:13.5px; border:1px solid #cbd5e1; border-radius:8px; font-family:inherit; }
+  textarea:focus, input:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px #e8efff; }
+  .actions { display:flex; gap:10px; margin-top:22px; }
+  .btn-primary { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:11px 24px; font-size:13.5px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .btn-primary:hover { background:var(--accent-dark); }
+  .hint { font-size:11.5px; color:#9aa3af; margin-top:12px; }
+  .done { display:none; text-align:center; padding:30px 0 10px; font-size:14px; font-weight:700; color:var(--accent-dark); }
+</style>
+</head>
+<body>
+<main>
+  <div class="card">
+    <h1>アンインストールありがとうございました</h1>
+    <p class="desc">今後の改善のため、よろしければ理由を教えてください（10秒で終わります）。</p>
+
+    <label class="q">使うのをやめた一番の理由は?</label>
+    <label class="opt"><input type="radio" name="reason" value="使い方がよく分からなかった">使い方がよく分からなかった</label>
+    <label class="opt"><input type="radio" name="reason" value="出品がうまくいかなかった／エラーが出た">出品がうまくいかなかった／エラーが出た</label>
+    <label class="opt"><input type="radio" name="reason" value="思っていた機能と違った">思っていた機能と違った</label>
+    <label class="opt"><input type="radio" name="reason" value="動作が重い・不安定だった">動作が重い・不安定だった</label>
+    <label class="opt"><input type="radio" name="reason" value="今は出品の予定がない（また使うかも）">今は出品の予定がない（また使うかも）</label>
+    <label class="opt"><input type="radio" name="reason" value="その他">その他</label>
+
+    <label class="q">どこが良くなれば、また使いたいと思いますか?（任意）</label>
+    <textarea id="detail" rows="4" placeholder="自由にお書きください"></textarea>
+
+    <label class="q">返信が必要な場合はメールアドレスをどうぞ（任意）</label>
+    <input id="contact" type="email" placeholder="you@example.com">
+
+    <div class="actions">
+      <button class="btn-primary" id="send">送信する</button>
+    </div>
+    <p class="hint">送信ボタンを押すと、お使いのメールソフトが開きます（宛先・本文は自動で入ります）。</p>
+    <p class="done" id="done">ご協力ありがとうございました。</p>
+  </div>
+</main>
+<script>
+document.getElementById('send').onclick = function () {
+  var r = document.querySelector('input[name="reason"]:checked');
+  var body = 'アンインストール理由アンケート\n\n'
+    + '理由: ' + (r ? r.value : '（未選択）') + '\n'
+    + '改善してほしい点: ' + (document.getElementById('detail').value || 'なし') + '\n'
+    + '連絡先: ' + (document.getElementById('contact').value || 'なし') + '\n';
+  location.href = 'mailto:skyre.japan@gmail.com'
+    + '?subject=' + encodeURIComponent('【AIフリマ出品アシスタント】アンインストールアンケート')
+    + '&body=' + encodeURIComponent(body);
+  document.getElementById('done').style.display = 'block';
+};
+</script>
+</body>
+</html>
