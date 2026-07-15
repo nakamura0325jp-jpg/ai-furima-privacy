@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIフリマ出品アシスタント｜写真を撮るだけで、4サイト同時出品。</title>
+<meta name="description" content="メルカリ・ヤフオク・PayPayフリマ・ラクマに対応。AIが商品名・説明・価格を自動生成し、出品フォームに一括入力するChrome拡張機能。1商品の入力作業を1〜2分に。完全無料。">
+
+<!-- OGP（SNSでシェアされた時の表示） -->
+<meta property="og:title" content="AIフリマ出品アシスタント｜写真を撮るだけで、4サイト同時出品。">
+<meta property="og:description" content="AIが商品名・説明・価格を自動生成し、メルカリ・ヤフオク・PayPayフリマ・ラクマの出品フォームに一括入力。1商品の入力が1〜2分に。完全無料。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nakamura0325jp-jpg.github.io/ai-furima-privacy/lp/">
+<meta property="og:image" content="https://nakamura0325jp-jpg.github.io/ai-furima-privacy/lp/icon.png">
+<link rel="canonical" href="https://nakamura0325jp-jpg.github.io/ai-furima-privacy/lp/">
+<link rel="icon" href="icon.png">
+
+<!-- 検索エンジン向けの構造化データ（無料アプリとしての情報） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AIフリマ出品アシスタント",
+  "operatingSystem": "Chrome",
+  "applicationCategory": "BrowserApplication",
+  "description": "写真を入れるだけでAIが商品名・説明文を自動作成し、メルカリ・ヤフオク・PayPayフリマ・ラクマへまとめて一括出品できる無料のChrome拡張機能。売上・利益の管理にも対応。",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
+  "url": "https://chromewebstore.google.com/detail/pmomchpklbbmapmjlemkoamconbkcldh"
+}
+</script>
+
+<style>
+  :root{
+    --blue:#2563eb;
+    --blue-dark:#1d4ed8;
+    --blue-deep:#1e3a8a;
+    --ink:#0f172a;
+    --body:#475569;
+    --muted:#64748b;
+    --line:#e2e8f0;
+    --bg-soft:#f8fafc;
+    --bg-blue:#eff4ff;
+    --radius:16px;
+    --shadow:0 10px 30px -10px rgba(37,99,235,.25);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP",Meiryo,sans-serif;
+    color:var(--body);line-height:1.8;background:#fff;-webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+  .ink{color:var(--ink)}
+
+  /* ===== ボタン ===== */
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;justify-content:center;
+    font-weight:700;font-size:1.05rem;line-height:1;
+    padding:18px 30px;border-radius:999px;cursor:pointer;border:0;
+    transition:transform .15s ease, box-shadow .15s ease;white-space:nowrap;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+    color:#fff;box-shadow:0 12px 24px -8px rgba(37,99,235,.6);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 30px -8px rgba(37,99,235,.7)}
+  .btn-ghost{background:#fff;color:var(--blue-dark);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--blue)}
+  .btn-sm{padding:11px 20px;font-size:.92rem}
+
+  /* ===== ヘッダー ===== */
+  header{
+    position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);
+    backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line);
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--ink);font-size:1.05rem}
+  .brand img{width:34px;height:34px;border-radius:8px}
+  .nav-cta{display:flex;align-items:center;gap:14px}
+  .nav-links{display:flex;gap:24px;font-size:.92rem;font-weight:600;color:var(--muted)}
+  .nav-links a:hover{color:var(--blue)}
+  @media(max-width:820px){.nav-links{display:none}}
+
+  /* ===== ヒーロー ===== */
+  .hero{
+    background:
+      radial-gradient(1200px 500px at 80% -10%, #dbe7ff 0%, transparent 60%),
+      linear-gradient(180deg,#fff 0%, var(--bg-blue) 100%);
+    padding:72px 0 80px;
+  }
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  @media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:36px}}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:700;
+    color:var(--blue-dark);background:#fff;border:1px solid #c7d7fe;
+    padding:7px 14px;border-radius:999px;margin-bottom:22px;box-shadow:var(--shadow)
+  }
+  .hero h1{
+    font-size:clamp(2rem,5vw,3.1rem);line-height:1.3;color:var(--ink);
+    font-weight:900;letter-spacing:-.01em;margin-bottom:20px;
+  }
+  .hero h1 .hl{
+    background:linear-gradient(transparent 62%, #bfdbfe 62%);
+  }
+  .hero p.lead{font-size:1.12rem;margin-bottom:30px;max-width:560px}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  .micro{display:flex;flex-wrap:wrap;gap:18px;margin-top:20px;font-size:.88rem;color:var(--muted);font-weight:600}
+  .micro span{display:inline-flex;align-items:center;gap:6px}
+  .check{color:#16a34a;font-weight:900}
+
+  /* 対応サイトチップ */
+  .sites{display:flex;flex-wrap:wrap;gap:10px;margin-top:30px}
+  .site-chip{
+    font-size:.86rem;font-weight:700;color:var(--ink);background:#fff;
+    border:1px solid var(--line);border-radius:999px;padding:8px 16px;
+  }
+
+  /* ブラウザ風フレーム（実スクリーンショット用） */
+  .shot-frame{
+    background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;
+    box-shadow:0 30px 60px -20px rgba(30,58,138,.35);
+  }
+  .shot-bar{background:#f1f5f9;border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:7px}
+  .shot-bar .dot{width:10px;height:10px;border-radius:50%}
+  .shot-bar .dot.r{background:#f87171}.shot-bar .dot.y{background:#fbbf24}.shot-bar .dot.g{background:#34d399}
+  .shot-frame img{display:block;width:100%;height:auto}
+  .hero-shot-cap{text-align:center;font-size:.8rem;color:var(--muted);margin-top:12px;font-weight:600}
+
+  /* ===== セクション共通 ===== */
+  section.block{padding:84px 0}
+  .block.alt{background:var(--bg-soft)}
+  .sec-head{text-align:center;max-width:680px;margin:0 auto 52px}
+  .sec-head .kicker{color:var(--blue);font-weight:800;font-size:.9rem;letter-spacing:.06em;margin-bottom:12px}
+  .sec-head h2{font-size:clamp(1.6rem,3.6vw,2.3rem);color:var(--ink);font-weight:900;line-height:1.35;margin-bottom:14px}
+  .sec-head p{font-size:1.05rem;color:var(--body)}
+
+  /* before/after */
+  .ba{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;max-width:760px;margin:0 auto}
+  @media(max-width:680px){.ba{grid-template-columns:1fr;gap:14px}.ba .arrow{transform:rotate(90deg)}}
+  .ba-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;text-align:center}
+  .ba-card.after{border-color:var(--blue);box-shadow:var(--shadow);background:linear-gradient(180deg,#fff,var(--bg-blue))}
+  .ba-card .tag{font-size:.8rem;font-weight:800;color:var(--muted);margin-bottom:8px}
+  .ba-card.after .tag{color:var(--blue-dark)}
+  .ba-card .big{font-size:2.2rem;font-weight:900;color:var(--ink);line-height:1.1}
+  .ba-card.after .big{color:var(--blue-dark)}
+  .ba-card .unit{font-size:.85rem;color:var(--muted);margin-top:6px}
+  .arrow{font-size:1.8rem;color:var(--blue);font-weight:900;text-align:center}
+  .ba-note{text-align:center;margin-top:24px;font-weight:700;color:var(--ink)}
+  .ba-note b{color:var(--blue-dark);font-size:1.15em}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+  @media(max-width:880px){.steps{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.steps{grid-template-columns:1fr}}
+  .step{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:26px 22px;position:relative}
+  .step .num{
+    width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+    color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:1.05rem;margin-bottom:16px
+  }
+  .step h3{color:var(--ink);font-size:1.05rem;margin-bottom:8px;font-weight:800}
+  .step p{font-size:.92rem}
+
+  /* features */
+  .feat{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  @media(max-width:880px){.feat{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.feat{grid-template-columns:1fr}}
+  .feat-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+  .feat-card .ic{font-size:1.6rem;margin-bottom:12px;display:block}
+  .feat-card h3{color:var(--ink);font-size:1rem;margin-bottom:6px;font-weight:800}
+  .feat-card p{font-size:.9rem}
+
+  /* screenshot gallery */
+  .gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:26px}
+  @media(max-width:760px){.gallery{grid-template-columns:1fr}}
+  .shot-card{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 14px 30px -18px rgba(30,58,138,.3)}
+  .shot-card .shot-bar{background:#f1f5f9}
+  .shot-card img{display:block;width:100%;height:auto;border-bottom:1px solid var(--line)}
+  .shot-meta{padding:18px 20px}
+  .shot-meta .step-no{font-size:.72rem;font-weight:800;color:var(--blue);letter-spacing:.05em;margin-bottom:4px}
+  .shot-meta h3{color:var(--ink);font-size:1.02rem;font-weight:800;margin-bottom:5px}
+  .shot-meta p{font-size:.88rem;color:var(--body)}
+
+  /* safety */
+  .safe{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:840px;margin:0 auto}
+  @media(max-width:680px){.safe{grid-template-columns:1fr}}
+  .safe-item{display:flex;gap:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 22px;align-items:flex-start}
+  .safe-item .ic{font-size:1.4rem;flex-shrink:0}
+  .safe-item h3{color:var(--ink);font-size:1rem;font-weight:800;margin-bottom:4px}
+  .safe-item p{font-size:.9rem}
+
+  /* pricing */
+  .price-card{
+    max-width:560px;margin:0 auto;background:linear-gradient(160deg,#fff,var(--bg-blue));
+    border:1.5px solid var(--blue);border-radius:24px;padding:44px 36px;text-align:center;box-shadow:var(--shadow)
+  }
+  .price-card .free{font-size:3rem;font-weight:900;color:var(--blue-dark);line-height:1}
+  .price-card .free small{font-size:1rem;color:var(--muted);font-weight:700}
+  .price-list{text-align:left;max-width:420px;margin:26px auto 30px;display:grid;gap:12px}
+  .price-list li{list-style:none;display:flex;gap:10px;font-size:.95rem;align-items:flex-start}
+  .price-list .check{font-size:1.1rem;margin-top:1px}
+  .price-note{font-size:.82rem;color:var(--muted);margin-top:18px}
+
+  /* faq */
+  .faq{max-width:760px;margin:0 auto;display:grid;gap:14px}
+  details{background:#fff;border:1px solid var(--line);border-radius:14px;padding:0 22px;overflow:hidden}
+  details summary{
+    cursor:pointer;list-style:none;padding:20px 0;font-weight:800;color:var(--ink);
+    font-size:1.02rem;display:flex;justify-content:space-between;align-items:center;gap:16px
+  }
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"＋";color:var(--blue);font-weight:900;font-size:1.3rem;flex-shrink:0}
+  details[open] summary::after{content:"−"}
+  details .ans{padding:0 0 22px;font-size:.95rem;color:var(--body)}
+  details .ans a{color:var(--blue);font-weight:700;text-decoration:underline}
+
+  /* final CTA */
+  .final{
+    background:linear-gradient(135deg,var(--blue),var(--blue-deep));color:#fff;
+    border-radius:28px;padding:64px 40px;text-align:center;margin:0 20px;
+  }
+  .final h2{font-size:clamp(1.6rem,3.6vw,2.4rem);font-weight:900;line-height:1.4;margin-bottom:16px}
+  .final p{font-size:1.08rem;opacity:.95;margin-bottom:32px;max-width:540px;margin-left:auto;margin-right:auto}
+  .final .btn-primary{background:#fff;color:var(--blue-dark);box-shadow:0 14px 30px -8px rgba(0,0,0,.4)}
+  .final .micro{justify-content:center;color:rgba(255,255,255,.9)}
+  .final .micro .check{color:#86efac}
+
+  /* footer */
+  footer{background:var(--ink);color:#cbd5e1;padding:54px 0 36px;font-size:.9rem}
+  .foot-grid{display:flex;justify-content:space-between;flex-wrap:wrap;gap:28px;margin-bottom:32px}
+  .foot-brand{display:flex;align-items:center;gap:10px;color:#fff;font-weight:800;font-size:1.05rem;margin-bottom:12px}
+  .foot-brand img{width:32px;height:32px;border-radius:7px}
+  .foot-col h4{color:#fff;font-size:.85rem;margin-bottom:12px;font-weight:700;letter-spacing:.04em}
+  .foot-col a{display:block;color:#cbd5e1;margin-bottom:9px}
+  .foot-col a:hover{color:#fff}
+  .foot-bottom{border-top:1px solid #1e293b;padding-top:24px;font-size:.8rem;color:#94a3b8;line-height:1.7}
+  .foot-bottom .disc{margin-top:10px}
+</style>
+</head>
+<body>
+
+<!-- ========== ヘッダー ========== -->
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top"><img src="icon.png" alt="AIフリマ出品アシスタント"> AIフリマ出品アシスタント</a>
+    <div class="nav-cta">
+      <nav class="nav-links">
+        <a href="#how">使い方</a>
+        <a href="#screens">画面</a>
+        <a href="#features">機能</a>
+        <a href="#price">料金</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn-primary btn-sm" href="https://chromewebstore.google.com/detail/pmomchpklbbmapmjlemkoamconbkcldh?utm_source=lp&utm_medium=web&utm_campaign=lp_v1" target="_blank" rel="noopener">無料で追加</a>
+    </div>
+  </div>
+</header>
+
+<!-- ========== ヒーロー ========== -->
+<section class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">🧩 Chrome拡張機能 ・ 完全無料</span>
+      <h1>写真を撮るだけで、<br><span class="hl">4サイト同時出品。</span></h1>
+      <p class="lead">
+        メルカリ・ヤフオク・PayPayフリマ・ラクマに対応。AIが商品名・説明・価格を自動で考えて、出品フォームに一括入力します。<br>
+        <b class="ink">1商品の入力作業を、1〜2分に。</b>
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/pmomchpklbbmapmjlemkoamconbkcldh?utm_source=lp&utm_medium=web&utm_campaign=lp_v1" target="_blank" rel="noopener">今すぐ無料でインストール</a>
+        <a class="btn btn-ghost" href="#how">使い方を見る</a>
+      </div>
+      <div class="micro">
+        <span><span class="check">✓</span> 完全無料</span>
+        <span><span class="check">✓</span> インストール約5分</span>
+        <span><span class="check">✓</span> クレジットカード登録不要</span>
+      </div>
+      <div class="sites">
+        <span class="site-chip">🛒 メルカリ</span>
+        <span class="site-chip">🔨 ヤフオク</span>
+        <span class="site-chip">💰 PayPayフリマ</span>
+        <span class="site-chip">🎀 ラクマ</span>
+      </div>
+    </div>
+
+    <!-- 実際のアプリ画面 -->
+    <div>
+      <div class="shot-frame">
+        <div class="shot-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <img src="shots/shot-publish.png" alt="AIフリマ出品アシスタントの出品画面。メルカリ・ヤフオク・PayPayフリマ・ラクマの4サイトへワンクリックで出品できるボタン" loading="eager">
+      </div>
+      <p class="hero-shot-cap">▲ ボタン1つで4サイトの出品フォームへ自動入力</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 課題 ========== -->
+<section class="block" id="problem">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">こんな悩み、ありませんか？</div>
+      <h2>出品の入力作業、毎日どれくらい溶けていますか？</h2>
+      <p>商品名を考え、説明文を書き、カテゴリを選び、価格を決める。それを4サイト分くり返すと、慣れた方でも1点あたり5〜10分。1日20点なら、入力作業だけで毎日2〜3時間が消えていきます。</p>
+    </div>
+    <div class="ba">
+      <div class="ba-card">
+        <div class="tag">これまで（手作業）</div>
+        <div class="big">5〜10<span style="font-size:1.2rem">分</span></div>
+        <div class="unit">1商品あたり・4サイト分</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="ba-card after">
+        <div class="tag">導入後</div>
+        <div class="big">1〜2<span style="font-size:1.2rem">分</span></div>
+        <div class="unit">写真とボタンだけ</div>
+      </div>
+    </div>
+    <p class="ba-note">入力作業が <b>最大1/5</b> に。浮いた時間を、商品リサーチや梱包・発送にまわせます。</p>
+  </div>
+</section>
+
+<!-- ========== 使い方 ========== -->
+<section class="block alt" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">かんたん4ステップ</div>
+      <h2>むずかしい設定はありません</h2>
+      <p>プログラミングの知識は不要。写真を入れて、ボタンを押すだけです。</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>写真を入れる</h3>
+        <p>商品の写真をドラッグ&ドロップ（最大10枚・並び替え可）。商品名やJANコードを入れるとAIの精度が上がります（任意）。</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>AIにおまかせ</h3>
+        <p>「AI解析を開始」を押すと、約3秒で商品名・説明文・カテゴリ・状態・相場価格を自動で作成します。</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>確認・調整</h3>
+        <p>生成された内容をチェックして、必要なら微調整。配送方法をドロップダウンから選びます。</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <h3>ワンクリック出品</h3>
+        <p>各サイトのボタンを押すと、出品フォームに画像までフル自動入力。最後の「出品する」だけ自分で押せば完了です。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 機能 ========== -->
+<section class="block" id="features">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">主な機能</div>
+      <h2>出品の「めんどう」を、まるごと自動化</h2>
+    </div>
+    <div class="feat">
+      <div class="feat-card"><span class="ic">📸</span><h3>画像10枚対応</h3><p>ドラッグ&ドロップでアップロード。並び替えもかんたん。各サイトへ自動アップロードします。</p></div>
+      <div class="feat-card"><span class="ic">🔎</span><h3>JANコード・品番対応</h3><p>JANコードや品番・商品名から、詳細スペックをAIが調べて反映します。</p></div>
+      <div class="feat-card"><span class="ic">✍️</span><h3>商品情報を自動生成</h3><p>商品名・説明文・カテゴリ・状態・相場価格を、AIがまとめて作成します。</p></div>
+      <div class="feat-card"><span class="ic">🚚</span><h3>配送設定も自動</h3><p>配送料の負担・発送元の地域・発送までの日数も自動で選択します。</p></div>
+      <div class="feat-card"><span class="ic">🛒</span><h3>メルカリは配送方法も</h3><p>メルカリでは配送方法の選択まで自動。設定の手間を減らします。</p></div>
+      <div class="feat-card"><span class="ic">🔁</span><h3>4サイトを一気に</h3><p>1回の入力で、メルカリ・ヤフオク・PayPayフリマ・ラクマへ展開できます。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 実際の画面 ========== -->
+<section class="block alt" id="screens">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">実際の画面</div>
+      <h2>こんな画面で、かんたんに使えます</h2>
+      <p>実際の操作画面です。シンプルな見た目で、はじめての方でも迷いません。</p>
+    </div>
+    <div class="gallery">
+      <div class="shot-card">
+        <div class="shot-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <img src="shots/shot-home.png" alt="ダッシュボード画面。今月の売上・利益・出品数がひと目でわかる" loading="lazy">
+        <div class="shot-meta"><div class="step-no">ホーム</div><h3>ダッシュボード</h3><p>売上・利益・出品数をひと目で確認。やりたい作業へすぐ移動できます。</p></div>
+      </div>
+      <div class="shot-card">
+        <div class="shot-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <img src="shots/shot-new.png" alt="新規出品画面。商品画像をドラッグ&ドロップでアップロードしAI解析する" loading="lazy">
+        <div class="shot-meta"><div class="step-no">STEP 1</div><h3>写真を入れて解析</h3><p>商品画像をドラッグ&ドロップ。商品名やJANコードを足せばAIの精度がさらに上がります。</p></div>
+      </div>
+      <div class="shot-card">
+        <div class="shot-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <img src="shots/shot-ai.png" alt="AIが生成した商品名と商品説明文が表示された画面" loading="lazy">
+        <div class="shot-meta"><div class="step-no">STEP 2</div><h3>AIが自動で作成</h3><p>商品名・説明文・カテゴリ・状態・価格をAIが自動生成。確認して微調整するだけ。</p></div>
+      </div>
+      <div class="shot-card">
+        <div class="shot-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <img src="shots/shot-publish.png" alt="4サイトへの出品ボタンが並んだ画面" loading="lazy">
+        <div class="shot-meta"><div class="step-no">STEP 3</div><h3>4サイトへワンクリック</h3><p>メルカリ・ヤフオク・PayPayフリマ・ラクマのボタンを押すだけで自動入力されます。</p></div>
+      </div>
+      <div class="shot-card">
+        <div class="shot-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <img src="shots/shot-manage.png" alt="出品管理画面。出品した商品の一覧と販売状態の管理" loading="lazy">
+        <div class="shot-meta"><div class="step-no">管理</div><h3>出品の記録・管理</h3><p>出品した商品を一覧で管理。売れたら他サイトの取り下げもサポートします。</p></div>
+      </div>
+      <div class="shot-card">
+        <div class="shot-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+        <img src="shots/shot-analytics.png" alt="売上分析画面。月ごとの売上・利益・利益率のグラフと集計" loading="lazy">
+        <div class="shot-meta"><div class="step-no">分析</div><h3>売上・利益を分析</h3><p>月ごとの売上・利益・利益率を自動集計。経営判断に役立ちます。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 安心設計 ========== -->
+<section class="block" id="safety">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">安心して使えます</div>
+      <h2>あなたのデータは、あなたのPCの中だけ</h2>
+    </div>
+    <div class="safe">
+      <div class="safe-item"><span class="ic">🖐️</span><div><h3>誤出品しない設計</h3><p>「出品する」の最終クリックは必ず人間が行います。勝手に出品されることはありません。</p></div></div>
+      <div class="safe-item"><span class="ic">💻</span><div><h3>ローカルで処理</h3><p>画像や商品データは、お使いのPC内で処理。外部サーバーには保存しません。</p></div></div>
+      <div class="safe-item"><span class="ic">🔒</span><div><h3>余計な送信なし</h3><p>AI解析（Gemini API）以外への外部送信は一切ありません。ログイン情報も集めません。</p></div></div>
+      <div class="safe-item"><span class="ic">🚫</span><div><h3>広告・追跡なし</h3><p>広告表示や第三者によるトラッキング（分析ツール含む）は一切ありません。</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 料金 ========== -->
+<section class="block alt" id="price">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">料金</div>
+      <h2>ずっと無料で使えます</h2>
+    </div>
+    <div class="price-card">
+      <div class="free">¥0 <small>/ 完全無料</small></div>
+      <ul class="price-list">
+        <li><span class="check">✓</span><span>拡張機能の利用料は無料。月額・買い切りの費用は一切かかりません。</span></li>
+        <li><span class="check">✓</span><span>AI解析は <b>Gemini API の無料枠</b> でOK。Googleアカウントがあれば無料で取得できます。</span></li>
+        <li><span class="check">✓</span><span>月に数百点出品しても、無料枠の範囲でまかなえます。</span></li>
+      </ul>
+      <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/pmomchpklbbmapmjlemkoamconbkcldh?utm_source=lp&utm_medium=web&utm_campaign=lp_v1" target="_blank" rel="noopener">今すぐ無料でインストール</a>
+      <p class="price-note">※ ご利用には Gemini APIキー（無料）と、各フリマサイトのアカウントが必要です。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FAQ ========== -->
+<section class="block" id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="kicker">よくある質問</div>
+      <h2>はじめての方へ</h2>
+    </div>
+    <div class="faq">
+      <details open>
+        <summary>プログラミングの知識は必要ですか？</summary>
+        <div class="ans">いいえ、不要です。Chromeに拡張機能を追加して、最初に一度だけ設定をするだけ。あとは写真を入れてボタンを押すだけで使えます。</div>
+      </details>
+      <details>
+        <summary>本当に無料ですか？</summary>
+        <div class="ans">はい。拡張機能そのものは無料です。AI解析に使う Gemini API も、Google の無料枠で利用できます。月に数百点の出品なら無料枠で足ります。</div>
+      </details>
+      <details>
+        <summary>「APIキー」とは何ですか？</summary>
+        <div class="ans">AI（Gemini）を使うための、あなた専用のパスのようなものです。Googleアカウントがあれば <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a> から無料で取得でき、設定画面に貼り付けるだけで使えます。</div>
+      </details>
+      <details>
+        <summary>勝手に出品されてしまいませんか？</summary>
+        <div class="ans">ありません。本ツールは出品フォームへの「入力」までを自動化します。最後の「出品する」ボタンは必ずあなた自身が押す設計なので、誤出品の心配はありません。</div>
+      </details>
+      <details>
+        <summary>安全性は大丈夫ですか？</summary>
+        <div class="ans">画像や商品データはお使いのPC内で処理され、外部サーバーには保存しません。AI解析（Gemini API）以外への送信はなく、広告・トラッキングも一切ありません。</div>
+      </details>
+      <details>
+        <summary>どのブラウザで使えますか？スマホでも使えますか？</summary>
+        <div class="ans">パソコンの Google Chrome 向けの拡張機能です。現在のところスマートフォンには対応していません（PCのChromeでご利用ください）。</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 最終CTA ========== -->
+<section class="block">
+  <div class="wrap">
+    <div class="final">
+      <h2>出品にかける時間を、<br>もっと価値ある作業へ。</h2>
+      <p>毎日の入力作業を1/5に。今日から、写真を撮るだけの出品をはじめましょう。</p>
+      <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/pmomchpklbbmapmjlemkoamconbkcldh?utm_source=lp&utm_medium=web&utm_campaign=lp_v1" target="_blank" rel="noopener">今すぐ無料でインストール</a>
+      <div class="micro" style="margin-top:22px">
+        <span><span class="check">✓</span> 完全無料</span>
+        <span><span class="check">✓</span> 約5分で設定完了</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== フッター ========== -->
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div style="max-width:320px">
+        <div class="foot-brand"><img src="icon.png" alt=""> AIフリマ出品アシスタント</div>
+        <p style="color:#94a3b8;font-size:.86rem">写真を撮るだけで、メルカリ・ヤフオク・PayPayフリマ・ラクマに同時出品できるChrome拡張機能。</p>
+      </div>
+      <div class="foot-col">
+        <h4>メニュー</h4>
+        <a href="#how">使い方</a>
+        <a href="#features">機能</a>
+        <a href="#price">料金</a>
+        <a href="#faq">よくある質問</a>
+      </div>
+      <div class="foot-col">
+        <h4>リンク</h4>
+        <a href="https://chromewebstore.google.com/detail/pmomchpklbbmapmjlemkoamconbkcldh?utm_source=lp&utm_medium=web&utm_campaign=lp_v1" target="_blank" rel="noopener">Chromeウェブストアで見る</a>
+        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="mailto:info@dev.skyrejapan.com">お問い合わせ</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>運営：スカイリージャパン（千葉県浦安市）　お問い合わせ：<a href="mailto:info@dev.skyrejapan.com" style="color:#cbd5e1;text-decoration:underline">info@dev.skyrejapan.com</a></div>
+      <div>© 2026 スカイリージャパン. All rights reserved.</div>
+      <div class="disc">※ メルカリ・ヤフオク・PayPayフリマ・Yahoo!フリマ・ラクマ は各社の商標です。本サービスは各社が公式に提供・推奨するものではなく、各社とは関係のない第三者ツールです。</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
