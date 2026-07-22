@@ -336,7 +336,7 @@
       <div class="step">
         <div class="num">2</div>
         <h3>AIにおまかせ</h3>
-        <p>「AI解析を開始」を押すと、約3秒で商品名・説明文・カテゴリ・状態・相場価格を自動で作成します。</p>
+        <p>「AI解析を開始」を押すと、AIが写真から商品名・説明文・状態・価格の目安を自動で作成します（数秒〜数十秒）。</p>
       </div>
       <div class="step">
         <div class="num">3</div>
@@ -346,7 +346,7 @@
       <div class="step">
         <div class="num">4</div>
         <h3>ワンクリック出品</h3>
-        <p>各サイトのボタンを押すと、出品フォームに画像までフル自動入力。最後の「出品する」だけ自分で押せば完了です。</p>
+        <p>各サイトのボタンを押すと、出品フォームに画像まで自動入力。あとはカテゴリを選んで、最後の「出品する」を自分で押すだけです。</p>
       </div>
     </div>
   </div>
@@ -361,7 +361,7 @@
     </div>
     <div class="feat">
       <div class="feat-card"><span class="ic">📸</span><h3>画像10枚対応</h3><p>ドラッグ&ドロップでアップロード。並び替えもかんたん。各サイトへ自動アップロードします。</p></div>
-      <div class="feat-card"><span class="ic">🔎</span><h3>JANコード・品番対応</h3><p>JANコードや品番・商品名から、詳細スペックをAIが調べて反映します。</p></div>
+      <div class="feat-card"><span class="ic">🔎</span><h3>JANコード・品番対応</h3><p>JANコードや品番・型番の入力に対応。JANコードは商品データベースと照合して精度を高められます（任意・要Yahoo!クライアントID設定）。</p></div>
       <div class="feat-card"><span class="ic">✍️</span><h3>商品情報を自動生成</h3><p>商品名・説明文・カテゴリ・状態・相場価格を、AIがまとめて作成します。</p></div>
       <div class="feat-card"><span class="ic">🚚</span><h3>配送設定も自動</h3><p>配送料の負担・発送元の地域・発送までの日数も自動で選択します。</p></div>
       <div class="feat-card"><span class="ic">🛒</span><h3>メルカリは配送方法も</h3><p>メルカリでは配送方法の選択まで自動。設定の手間を減らします。</p></div>
@@ -423,8 +423,8 @@
     <div class="safe">
       <div class="safe-item"><span class="ic">🖐️</span><div><h3>誤出品しない設計</h3><p>「出品する」の最終クリックは必ず人間が行います。勝手に出品されることはありません。</p></div></div>
       <div class="safe-item"><span class="ic">💻</span><div><h3>ローカルで処理</h3><p>画像や商品データは、お使いのPC内で処理。外部サーバーには保存しません。</p></div></div>
-      <div class="safe-item"><span class="ic">🔒</span><div><h3>余計な送信なし</h3><p>AI解析（Gemini API）以外への外部送信は一切ありません。ログイン情報も集めません。</p></div></div>
-      <div class="safe-item"><span class="ic">🚫</span><div><h3>広告・追跡なし</h3><p>広告表示や第三者によるトラッキング（分析ツール含む）は一切ありません。</p></div></div>
+      <div class="safe-item"><span class="ic">🔒</span><div><h3>余計な送信なし</h3><p>商品データの外部送信はAI解析（Gemini API）と、任意で使うJANコード照合（Yahoo!ショッピングAPI）だけ。ログイン情報は集めません。</p></div></div>
+      <div class="safe-item"><span class="ic">🚫</span><div><h3>広告なし</h3><p>広告表示はありません。改善のための匿名の利用統計（操作イベントのみ・商品情報や個人情報は含まない）だけを送信し、設定からいつでもオフにできます。</p></div></div>
     </div>
   </div>
 </section>
@@ -475,7 +475,7 @@
       </details>
       <details>
         <summary>安全性は大丈夫ですか？</summary>
-        <div class="ans">画像や商品データはお使いのPC内で処理され、外部サーバーには保存しません。AI解析（Gemini API）以外への送信はなく、広告・トラッキングも一切ありません。</div>
+        <div class="ans">画像や商品データはお使いのPC内で処理され、外部サーバーには保存しません。商品データの送信先はAI解析（Gemini API）と任意のJANコード照合（Yahoo!ショッピングAPI）のみ。広告はなく、匿名の利用統計（操作イベントのみ）は設定からオフにできます。詳しくはプライバシーポリシーをご覧ください。</div>
       </details>
       <details>
         <summary>どのブラウザで使えますか？スマホでも使えますか？</summary>
@@ -518,7 +518,7 @@
       <div class="foot-col">
         <h4>リンク</h4>
         <a href="https://chromewebstore.google.com/detail/pmomchpklbbmapmjlemkoamconbkcldh?utm_source=lp&utm_medium=web&utm_campaign=lp_v1" target="_blank" rel="noopener">Chromeウェブストアで見る</a>
-        <a href="privacy.html">プライバシーポリシー</a>
+        <a href="https://nakamura0325jp-jpg.github.io/ai-furima-privacy/" target="_blank" rel="noopener">プライバシーポリシー</a>
         <a href="mailto:info@dev.skyrejapan.com">お問い合わせ</a>
       </div>
     </div>
